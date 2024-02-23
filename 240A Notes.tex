@@ -1,0 +1,1790 @@
+
+\documentclass[x11names,reqno,14pt]{extarticle}
+\input{preamble}
+\usepackage[document]{ragged2e}
+\usepackage{epsfig}
+
+\pagestyle{fancy}{
+	\fancyhead[L]{Fall 2023}
+	\fancyhead[C]{240A}
+	\fancyhead[R]{John White}
+  
+  \fancyfoot[R]{\footnotesize Page \thepage \ of \pageref{LastPage}}
+	\fancyfoot[C]{}
+	}
+\fancypagestyle{firststyle}{
+     \fancyhead[L]{}
+     \fancyhead[R]{}
+     \fancyhead[C]{}
+     \renewcommand{\headrulewidth}{0pt}
+	\fancyfoot[R]{\footnotesize Page \thepage \ of \pageref{LastPage}}
+}
+\newcommand{\pmat}[4]{\begin{pmatrix} #1 & #2 \\ #3 & #4 \end{pmatrix}}
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\B}{\mathbb{B}}
+\newcommand{\fin}{``\in"}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\pdim}{pdim}
+\DeclareMathOperator{\gldim}{gldim}
+\DeclareMathOperator{\lgldim}{lgldim}
+\DeclareMathOperator{\rgldim}{rgldim}
+\DeclareMathOperator{\idim}{idim}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\Rmod}{R-\text{mod}}
+\newcommand{\RMod}{R-\text{Mod}}
+\newcommand{\onto}{\twoheadrightarrow}
+\newcommand{\barf}{\bar{f}}
+\newcommand{\pp}[2]{\dfrac{\partial #1}{\partial #2}}
+\newcommand{\dd}[2]{\dfrac{d#1}{d#2}}
+\newcommand{\into}{\hookrightarrow}
+\newcommand{\mk}[1]{\mathfrak{#1}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\E}{\mathbb{E}}
+\renewcommand{\phi}{\varphi}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\supp}{supp}
+
+\newcommand{\exactlon}[5]{
+		\begin{tikzcd}
+			0\ar[r]&#1\ar[r,"#2"]& #3 \ar[r,"#4"]& #5 \ar[r]&0
+		\end{tikzcd}
+}
+
+\title{240 - Intro Differential Geometry}
+\author{John White}
+\date{Fall 2023}
+
+
+\begin{document}
+
+
+\section*{Lecture 1}
+
+\defn
+
+A \underline{chart around a point} $x \in X$, where $X$ is a topological space, is a set $(U, \phi)$, where $U$ is an open neighborhood of $x$, and $\phi:U\to\R^n$ is a homeomorphism onto its image with $\phi(x) = 0$.
+
+\section*{Lecture 2, 10/3/23}
+
+Recall a \underline{topological manifold} is a topological space which is 
+\begin{enumerate}
+
+\item Hausdorff
+
+\item 2nd countable
+
+\item Locally Euclidean
+
+\end{enumerate}
+
+Our goal is to move to smooth manifolds, on which we can do calculus. 
+
+This is done by picking a point on our smooth manifold, translating it into a linear space through the use of charts, doing the calculus, and then translating back. 
+
+\exm
+
+Let $M = \R$ with the chart $\phi(x) = x^3 = y$. Then the function $f(x) = x^2$ is differentiable in the normal sense, but 
+\[
+f\circ\psi^{-1}(y) = y^{\frac23}
+\]
+is not differentiable at $y = 0$!
+
+\defn
+
+Two charts $(U_\alpha, \phi_\alpha), (U_\beta, \phi_\beta)$ are \underline{$C^\oo$ compatible} if, whenever $U_\alpha \cap U_\beta \neq \varnothing$, then we have a smooth function
+\[
+\phi_\beta \circ \phi_\alpha^{-1}:\phi_\alpha(U_\alpha \cap U_\beta) \to \phi_\beta(U_\alpha \cap U_\beta)
+\]
+whose inverse is also smooth. 
+
+The maps $\phi_\alpha \circ \phi_\beta^{-1}, \phi_\beta \circ \phi_\alpha^{-1}$ are called \underline{transition maps}, or sometimes \underline{coordinate changes}.
+
+\exm
+
+On $S^2$ we have the stereographic projections 
+\[
+\begin{tikzcd}
+\mc{U}_1 = S^2 \setminus \{S\} \ar[r, "\phi_1"] & \R^2 \\
+\mc{U}_2 = S^2 \setminus\{N\} \ar[r, "\phi_2"] & \R^2 
+\end{tikzcd}
+\]
+
+Then
+\[
+\phi_2\circ\phi_1^{-1} = \left(\frac{4u}{u^2 + v^2}, \frac{4v}{u^2 + v^2} \right)
+\]
+
+This is $C^\oo$ on the domain $\phi_1(\mc{U}_1 \cap \mc{U}_2)$, and similarly for the other way around. So these are $C^\oo$ compatible charts. 
+
+\exm
+
+Let $M = \R$, with chart $(\mc{U} = \R, \phi(x) = x)$, $(\mc{V} = \R, \psi(x) = x^3)$
+
+These are two incompatible charts!
+
+\defn
+
+An \underline{atlas} is a collection of charts $(U_\alpha, \phi_\alpha)$ such that 
+\[
+\bigcup_\alpha U_\alpha = M
+\]
+
+\defn
+
+A \underline{smooth structure/ $C^\oo$ structure / differentiable structure} on a topological manifold is an atlas $\ms{U} = \{(U_\alpha, \phi_\alpha)\}$ such that
+\begin{enumerate}
+
+\item All charts in $\ms{U}$ are pairwise $C^\oo$ compatible. 
+
+\item The atlas is maximal in the sense that any chart $(U,\phi)$ which is $C^\oo$ compatible with every element of $\ms{U}$ is contain in $\ms{U}$
+
+\end{enumerate}
+
+\prop[1.17]
+
+Let $M$ be a topological manifold. Then
+
+\begin{enumerate}[label=(\alph*)]
+
+\item Every smooth atlas is contained in a unique maximal smooth atlas, i.e. a smooth structure. 
+
+\item Two smooth atlases determine the same smooth structure if and only if their union is a smooth atlas. 
+
+\end{enumerate}
+
+\proof
+
+I omit it because i didn't really follow and don't think it's that important it's 1.17 in Lee sorrrryyyyyyy
+
+\qed
+
+The upshot of all of this is that we can specify a smooth structure by specifying a smooth atlas. 
+
+\exm
+
+$(\R^n, \phi = \Id_{\R^n})$ is the standard smooth structure on $\R^n$
+
+\exm
+
+$(\R, \phi = \Id_\R)$, $(\R, \psi(x) = x^3)$ are two different smooth structures on $\R$. 
+
+From the above example, it seems we are overcounting - there are many different distinct smooth structures on $\R$. Later, we will fix this by introducing the notion of diffeomorphism. 
+
+Every topological manifold with a single chart has a smooth structure.
+
+\exm
+
+$\R^3$ minus a knot
+
+\exm 
+
+$\GL(n,\R)$ is an open subset of $\R^{n^2}$ because it is the preimage of $\R\setminus\{0\}$ under the continuous map $\det$
+
+\defn
+
+A \underline{smooth manifold} is a topological manifold together with a smooth structure. 
+
+\exm $S^2$ needs two charts as a consequence of the hairy ball theorem. 
+
+\exm
+
+Here is a smooth structure on $S^n$. 
+
+$S^n$ is defined as the solution locus of the polynomial $x_1^2 + \cdots + x_{n + 1}^2 = 1$ in $\R^{n + 1}$. 
+
+For each $i = 1, \dots, n + 1$, let $U_i^{\pm}$ be all the points on $S^n$ such that $x_i$ is positive or negative, and define $\phi_i^\pm$ by just deleting the $i$th coordinate, so the sum of squares is strictly less than 1. 
+
+It is clear that this is indeed an atlas. 
+
+We now claim that $\{(U_i^\pm, \phi_i^\pm)\}_{i=1}^{n + 1}$ is a smooth atlas. 
+\begin{align*}
+(\phi_1^+\circ(\phi_2^-)^{-1})(y_1,\dots, y_n) & = \phi_1^+\left(y_1, -\sqrt{1 - \sum_{i=1}^ny_i^2}, y_2, \dots, y_n\right) \\
+							& = \left(-\sqrt{1 - \sum_{i=1}^ny_i^2}, y_2, \dots, y_n\right)
+\end{align*}
+ 
+This is smooth because $\sum y_i^2 < 1$, so the square root will not cause any trouble. 
+
+The others can be checked similarly! 
+
+$\ms{U} = \{(U_i^\pm, \phi_i^\pm)\}_{i=1}^{n + 1}$ defines a smooth structure on $S^n$ which is called the 
+
+\underline{standard smooth structure on $S^n$}
+
+\subsubsection*{\underline{Remark}}
+
+
+Stereographic chart and the standard charts given above are $C^\oo$ compatible. 
+
+\section*{Lecture 3, 10/5/23}
+
+Our goal today is to describe $\RP^n$ as a smooth manifold. 
+
+\defn
+
+We define $\RP^n$ as $\R^{n + 1}$ quotiented by the action of $\R$ given by scaling. That is, $(x_1, \dots, x_{n + 1}) \sim (y_1, \dots, y_{n + 1})$ if one is a nonzero scalar multiple of the other. 
+
+We can also describe $\RP^n$ as a quotient of $S^2$ by the $\Z_2$-action given by the antipodal map. 
+
+We have a canonical projection $\pi:\R^{n + 1}\setminus\{0\}\to \RP^n$. We describe such points using so-called \underline{homogeneous coordinates}. We write $\pi(x) = [x]$. This denotes the line passing through $x$. 
+
+\claim $\RP^n$ is Hausdorff, Second Countable, and admits a smooth structure. 
+
+\lem 
+
+$\pi$ is an open map. In particular, $\RP^n$, as a topological space, is second countable.
+
+\proof 
+\,
+
+Let $U \subseteq \R^{n + 1} \setminus \{0\}$ be open. We want to show that $\pi(U) \subseteq \RP^n$ is open, i.e. $\pi^{-1}(\pi(U))$ is open.
+
+Now 
+\[
+\pi^{-1}(\pi(U)) = \bigcup_{x\in U}[x] = \bigcup_{x\in U}\bigcup_{\lambda\neq0}\{\lambda x\}
+\]
+
+For $\lambda\neq0$, we define $\lambda(U)$ to be the image of $U$ under the map $x \mapsto \lambda x$. 
+
+If $\lambda\neq0$, the $\lambda(U)$ is open for $U$ open. 
+
+Thus 
+\[
+\pi^{-1}(\pi(U)) = \bigcup_{\lambda\neq0\in \R}\lambda(U)
+\]
+is open.
+
+\qed
+
+\lem
+
+Let $X$ be a topological space, $\sim$ an equivalence relation on $X$. Put the quotient topology on $X/\sim$. Assume that $\pi:X\to X/\sim$ is an open mapping. Then if $X$ is second countable, 
+\begin{enumerate}
+
+\item If $X$ is 2nd countable, then so is $X/\sim$. 
+
+\item $X/\sim$ is Hausdorff if and only if $R = \{(x, y) \mid x \sim y\} \subset X\times X$ is closed. 
+
+\end{enumerate}
+
+\proof
+
+Shut up!
+
+\qed
+
+So $\RP^n$ is Hausdorf, since 
+\[
+R = \{(x, y) \in \left(\R^{n + 1} \setminus \{0\}\right)\times\left(\R^{n + 1}\setminus\{0\}\right) \mid y = \lambda x, \lambda\neq0\}
+\]
+is closed. 
+
+Remark: $y = \lambda x$ for some nonzero $\lambda$ is equivalent to the statement 
+\[
+\sum_{i, j = 1}^{n + 1}(x_iy_j - x_jy_i)^2 = 0
+\]
+
+We can express this as a function $F(x, y)$, which is continuous, and this set is the preimage of 0, which is closed. So, this is closed. 
+
+Finally, for $\RP^n$ to be a smooth manifold, it needs a smooth atlas.
+
+\subsubsection*{\underline{Notation}}
+
+\underline{Homogeneous coordinates} on $\RP^n$ work as follows. We denote $pi(x_1, \dots, x_{n + 1})$ by $[x+1; \cdots ; x_{n + 1}]$. 
+
+Note also, for any $i$, and any $[x] \in \RP^n$ with nonzero $x_i$'th coordinate, $[x]$ can be represented by a unique equivalence class such that the $i$th entry in the homogeneous coordinates is 1. 
+
+\lem
+
+$\RP^n$ admits a smooth structure. 
+
+\proof 
+\,
+
+Let $U_i = \{[x_1;\cdots;x_{n + 1}] \in \RP^n \mid x_i\neq0\}$. This is open for $i = 1, \dots, n + 1$. 
+
+Note that $\bigcup_{i=1}^{n + 1}U_i = \RP^n$, because not every coordinate can be zero. 
+
+If $x_i\neq0$ (i.e. $[x] \in U_i$) then 
+\[
+[x_1;\cdots;x_i;\cdots;x_{n + 1}] = [\frac{x_1}{x_i};\cdots;1;\cdots;\frac{x_{n + 1}}{x_i}]
+\]
+
+So, we can define a bijection by sending $[x]$ to the point $(\frac{x_1}{x_i}, \dots, \hat{1}, \dots, \frac{x_{n + 1}}{x_i})\in\R^n$. Call this $\phi_i$
+
+This is a homeomorphism.
+
+\claim
+
+$\{(U_i, \phi_i)\}_{i = 1}^{n + 1}$ is a smooth atlas for $\RP^n$
+
+\proof
+
+Let's check, on $\phi_2(U_1 \cap U_2)$
+
+\begin{align*}
+\phi_1\circ\phi_2^{-1} (y_1, \dots, y_n) & = \phi_1\left([y_1;1;y_2;\cdots;y_n]\right) \\
+& = \phi_1\left([1;\frac{1}{y_1};\frac{y_2}{y_1};\cdots;\frac{y_n}{y_1} ]\right) \\
+& = \left(\frac{1}{y_1}, \frac{y_2}{y_1}, \dots, \frac{y_n}{y_1})\right)
+\end{align*}
+
+In $\phi_2(U_1\cap U_2)$, neither the first nor the second coordinates are zero, so we don't run into any division by zero problems. 
+
+The rest can be checked similarly. 
+
+\qed
+
+Hence, $\RP^n$ is a smooth manifold. 
+
+\exm
+
+$\RP^2 = S^2/\Z_2$, $x\mapsto -x$. 
+
+\section*{Lecture 4, 10/10/23}
+
+\subsection*{\underline{Chapter 2: Smooth maps}}
+
+\subsubsection*{Smooth functions}
+
+Let $M^n$ be a smooth manifold, and let $f:M\to\R$ be a function (not assumed to be continuous necessarily, though it will turn out to be). For any point $p$, there is a chart $(U, \phi)$ around that point. We can consider the composition
+\[
+\begin{tikzcd}
+\phi(U) \ar[r, "\phi^{-1}"] & M \ar[r, "f"] & \R
+\end{tikzcd}
+\]
+which is a function from $\R^n\to\R$, to which we may apply the usual definition of smoothness at $\phi(p)$. 
+
+\defn
+
+A \underline{smooth function} from a manifold $M$ to $\R$ is a function which is smooth in the above sense at every point. 
+
+\exm
+
+Given a smooth $f:\R^{n + 1}\to\R$, we can consider the restriction $f|_{S^n}:S^n\to\R$. This is also smooth. 
+
+To check, we consider the charts $(U_i^\pm, \phi_i^\pm)_{i=1}^{n + 1}$ the ``standard" smooth structure on $S^n$, as defined earlier. 
+
+We have 
+\[
+f\circ(\phi_1^+)^{-1}(y_1,\dots,y_n)= f\left(\sqrt{1 - \sum_{i=1}^ny_i^2}, y_1, \dots, y_n\right)
+\]
+
+All of these things are smooth on their domains, so this is smooth. The rest can be checked similarly. 
+
+\subsubsection*{\underline{Remark}}
+
+If $f:M\to\R$ is $C^\oo$, then $f:M\to\R$ is continuous. 
+
+Note $f|_U = (f\circ\phi^{-1})\circ\phi$. $f\circ\phi^{-1}$ is $C^\oo$ on $\R^n$, hence continuous, and $\phi$ is continuous. 
+
+\defn
+
+Let $M^n$ be a smooth manifold and $(U,\phi)$ a smooth chart. This sends $U$ to $\phi(U)$, and $p$ to $(x_1(p),\dots,x_n(p))$. 
+
+Define $f_i:U\to\R$ by $p\mapsto x_i(p)$, that is $f_i = \pi_i\circ f$. 
+
+$f_i$ is a smooth function defined on $U$. 
+
+We can see $f_i \circ \phi^{-1}(x_1,\dots, x_n) = x_i \in C^\oo$
+
+These are called \underline{local coordinates about a point $p$ / on an open set $U$}
+
+\subsubsection*{\underline{Remark}}
+
+If $M^n$ is a smooth manifold and $U\subseteq M$, then $U$ inherits the smooth structure from $M$. If the atlas for $M$ is given by $\{(U_\alpha,\phi_\alpha)\}$, then the atlas for $U$ is simply given by $\{(U_\alpha \cap U, (\phi_\alpha)|_{U_\alpha\cap U})\}$
+
+In particular, if $(U, \phi)$ is a smooth chart, then $U$ is a smooth manifold with a single chart. 
+
+\defn
+
+We write $C^\oo(M)$ to mean the collection of smooth functions $f:M\to\R$
+
+These come with a nice ring structure - we can add and multiply by scalars, making it into an infinite dimensional vector space. In fact, because you can multiply them, they form an $\R$-algebra. 
+
+
+These local coordinate functions can be extended to $C^\oo(M)$. 
+
+\subsection*{\underline{Smooth maps}}
+
+Let $M, N$ be smooth manifolds, and $F:M\to N$ a map (again, not assumed to be continuous). 
+
+\defn
+
+At any point $p \in M$, there is a chart $(U, \phi)$ with $p \in U$. Similarly, there is a chart $(V,\psi)$ on $N$ such that $F(U) \subseteq V$.
+
+We can consider the composition
+\[
+\begin{tikzcd}
+\phi(U) \ar[r, "\phi^{-1}"] & U \ar[r, "F"] & F(U)\ar[r, "\psi"] & \psi(F(U))
+\end{tikzcd}
+\]
+The composition $\psi\circ F \circ \phi^{-1}$, defined on $\phi(U\cap F^{-1}(V))$, is a function from $\R^m$ to $\R^n$, where $m$ and $n$ are the dimensions of $M, N$ respectively. We may then check if this function is smooth. If it is, we say that $F$ is smooth at the point $p$. 
+
+A map $F:M\to N$ is \underline{a smooth map} if $F$ is smooth in the above sense at every point $p$. 
+
+\lem
+
+If $F:M\to N$ is $C^\oo$, then $F$ is continuous. 
+
+\proof
+
+\subsubsection*{\underline{Remark}}
+
+Without the additional acquirement that $F(U) \subseteq V$ in the definition, this is false. 
+
+It will suffcie to check that for all $p \in M$, there exists an open $U$ containing $p$ such that $f|_U:U\to N$ is continuous. 
+
+Since $F$ is smooth, there exist smooth charts $(U, \phi)$ of $M$ at $p$, $(V,\psi)$ of $N$ at $F(p)$ such that
+\[
+\hat{F} = \psi\circ F\circ\phi^{-1}:\phi(U)\to\psi(V)
+\]
+is $C^\oo$. 
+
+Therefore, $F|_U = \psi^{-1} \circ \hat{F} \circ \phi$ is $C^0$, because everything in sight is also $C^0$. 
+
+\qed
+
+\section*{Lecture 5, 10/12/23}
+
+Hint for homework problem:
+
+If $F^*(C^\oo(N)) \subset C^\oo(M)$, then $F$ is $C^\oo$. 
+
+\exm
+
+Consider $F:(\R,\phi=\Id) \to (\R, \psi(x) = x^5)$ given by $x \mapsto x^\frac15$. This is $C^\oo$. 
+
+Check: $\psi \circ F \circ \psi^{-1}(x) = \psi\circ F(x) = \psi(x^\frac15) = x$. 
+
+In fact, $F^{-1}$ is $C^\oo$! i.e. $F$ is a diffeomorphism. 
+
+\defn
+
+A function $f:M\to N$ between two smooth manifolds is a \underline{diffeomorphism} if $F$ is a bijection, and both $F$ and $F^{-1}$ are $C^\oo$. 
+
+In other words, it is an isomorphism in the category of smooth manifolds. 
+
+\subsubsection*{\underline{Question:}} how many smooth structures on $\R^n$ are there \textit{up to diffeomorphism?}
+
+If $n \leq 3$, then there is a unique smooth structure \textit{up to diffeomorphism}, a result due to Moise for $n = 3$, and Radon for $n \leq 2$. 
+
+When $n \geq 5$, there is a unique smooth structure \textit{up to diffeomorphism}, a result due to Stalling. 
+
+For $n = 4$, there are uncountably many smooth structures \textit{even up to diffeomorphism}! This is due to a result by Donaldson.
+
+These are the so-called ``exotic" $\R^4$s.
+
+\subsubsection*{\underline{What about compact spaces?}}
+
+The simplest example is $S^n$. This question can be put into a much bigger context. 
+
+The smooth category is a subcategory of the topological category, this question is getting at the difference between them. The homotopy category is a subcategory of Top. 
+
+The ``holy grail" would be a complete classification of spaces up to homotopy equivalence/homeomorphism/diffeomorphism. 
+
+\subsubsection*{\underline{Poincar\'e conjecture:}} Every closed $n$-dimensional topological manifold homotopic to $S^n$ is actually homeomorphic to the sphere. 
+
+This is true for $n \geq 5$, famous work of Smale in 1966. 
+
+For $n = 4$, the answer is also yes, due to Freedman in 1986 (he used to be here!!!!!!!)
+
+For $n = 3$ the answer is also yes, due to Perelman in 2006
+
+For $n \leq 2$, the answer is yes. 
+
+Every one of these earned a fields medal!!!
+
+What about in the smooth category?
+
+\subsubsection*{\underline{Smooth Poincar\'e conjecture:}} Every smooth manifold homeomorphic to $S^n$ is actually diffeomorphic to $S^n$
+
+\underline{Milnor, 1962:} There exists a smooth structure on $S^7$ which is not diffeomorphic to the standard one. In fact, there are 28 of them up to diffeomorphism. 
+
+For each dimension $n$, we have a resolution to the smooth conjecture, but for $n = 4$ it is still open. 
+
+\underline{Remark}
+
+The way we defined a $C^\oo$ structure, we can also define a $C^k$ structure, where $k = \in \N$. 
+
+We may also define $C^\omega$, which is real analytic, which is a stronger condition than smoothness. 
+
+$C^0$ is just topological manifolds. 
+
+However, every object of $C^k$ is homoemorphic to an object of $C^\oo$ for $k > 0$. But for $C^0$, there are topological manifolds which cannot be smoothed, and there are different smooth structures. 
+
+So, we sometimes refer to a smooth structure as a differentiable structure. So as long as we have a first derivative, we can somehow achieve a result like the Weirstrass approximation theorem. 
+
+The (somewhat more) precise way to say this is that we can topologize the set of $C^1$ maps between two $C^1$ manifolds, and the smooth maps are dense in this set. 
+
+This is all theorems of Whitney and Nash
+
+\subsection*{\underline{Partitions of unity (P.O.U)}}
+
+From now on, when we say ``manifold," it is understood to mean a smooth manifold with some smooth structure. 
+
+The idea is that a manifold is locally Euclidean, but not globally. We would like a way to reduce global information to sums of local information, and partitions of unity allow us to do that. 
+
+\subsubsection*{\underline{Goal:}}
+
+We want to write $1 = \sum_\alpha f_\alpha, f_\alpha \in C^\oo(M)$, and \underline{nonzero} only in some neighborhood. We will use so-called ``bump functions."
+
+We have two issues. 
+
+\begin{enumerate}
+
+\item We need to establish the existence of bump functions
+
+\item We need to make sense of this summation
+
+\end{enumerate}
+
+We now address 1 by showing the existence of smooth bump functions in $\R^n$. 
+
+Consider $f:\R\to\R$ given by 
+\[
+f(t) = \begin{cases} e^{-\frac{1}{t}}, & t > 0 \\ 0 & t \leq 0 \\ \end{cases}
+\]
+This is $C^\oo$
+
+We have a ``cutoff" function $h:\R\to[0,1]$, which is identically 1 on $(-\oo, 1]$, decreasing on $[1,2]$, and identically zero on 
+$[2,\oo)$. 
+
+We can define it by 
+\[
+h(t) = \frac{f(2 - t)}{f(2 - t) + f(t - 1)}
+\]
+
+We pass to $\R^n$, i.e. a $H:\R^n\to[0,1]\in C^\oo(\R^n)$ such that
+\begin{enumerate}
+
+\item $H \equiv 1$ on $\bar{B_1(0)}$ 
+
+\item $H \equiv 0$ outside $B_2(0)$. 
+
+\end{enumerate}
+
+We can simply define $H = h(|x|)$
+
+The idea is that for any manifold $M,$ and any point $p\in M$, there is a chart $(U,\phi)$ about $p$. We can normalize so that $\phi(U) \supset B_2(0)$ and $\phi(p) = 0$. 
+
+We can define $H\circ\phi\in C^\oo(U)$. We want to upgrade it to something in $C^\oo(M)$. We can do this easily by setting it to be identically zero outside of $U$.
+
+\cor
+
+For any $p \in M$, for any open $U \ni p$, and for any $f \in C^\oo(U)$, there exists an open $p \in V \subseteq U$, and a smooth function $\tilde{f}\in C^\oo(M)$, such that $\tilde{f}|_V = f|_V$.
+
+\proof
+
+Take $\tilde{f}$ to be $(H\circ\phi)f$. $H\circ\phi$ is identically 1 on $\phi^{-1}(B_1(0))$
+
+\qed
+
+\section*{Lecture 6, 10/17/23}
+
+Notation: for $f \in C^0(M)$, we define the support of $f$ as 
+\[
+\supp f \eqdef \bar{\{x\in M \mid f(x) \neq 0\}}
+\]
+
+\thm
+
+Let $M^n$ be a smooth manifold, with $F \subset M$ closed, and $K \subset\subset M$, meaning a compact subset. Suppose that $K \cap F = \varnothing$. Then there is a $f\in C^\oo(M)$ such that $0\leq f\leq1$, $f\equiv1$ on $K$, and $f\equiv0$ on $F$.
+
+\proof
+
+By assumption, $\underbrace{K}_{\text{compact}} \subset \overbrace{M \setminus F}^{\text{open}}$. 
+
+For all $p \in K$, there is a chart $(U_p, \phi_p)$ such that $\phi_p(p) = 0$, $U_p \subset M \setminus F$, and $\phi_p(U_p) \supset \bar{B_2(0)}$
+
+Consider the open cover of $K$ given by $\{\phi_p^{-1}(B_1(0))\}_{p\in K}$. By compactness, this admits a finite subcover
+\[
+\{\phi_{p_1}^{-1}(B_1(0)), \phi_{p_2}^{-1}(B_1(0)), \dots, \phi_{p_k}^{-1}(B_1(0))\}
+\]
+
+Set $\mc{U}_i = U_{p_i}$, $\phi_i = \phi_{p_i}$, and
+\[
+f(x) = 1 - \prod_{i=1}^k\left(1 - (H\circ\phi_i)(x)\right) \in C^\oo(M)
+\]
+
+For any $p \in K$, $p \in \phi_j^{-1}(B_1(0))$ for some $j$, so $H\circ\phi_j(p) = 1$, so $f(p) = 1 - 0 = 1$. 
+
+Finally, we must verify that $f \equiv 0$ on $F$. This happens because $U_i \subset M \setminus F$, so $H\circ\phi_i$ vanishes on $F$. 
+
+\qed
+
+Now it is time for partitions of unity. These are a tool to piece together local information to get global information. 
+
+We want $1 \equiv \sum_\alpha f_\alpha$ for $f_\alpha \in C^\oo(M)$, $\supp f_\alpha \subset U_\alpha$, and $\{U_\alpha\}_\alpha$ is an open cover of $M$. We need to worry about sumability. 
+
+We insist that for any point $p$, there are only finitely many $\alpha$ such that $f_\alpha(p)\neq0$.
+
+\defn
+
+Let $X$ be a topological space. A collection of subsets $\{S_\alpha\}$ is called \underline{locally finite} if for any $p \in X$, there is a neighborhood $U \ni p$ such that $U \cap S_\alpha = \varnothing$ for all but finitely many $\alpha$. 
+
+\exm
+
+If $\{\supp f_\alpha\}$ is locally finite, then for all $p$, there is a neighborhood $U\ni p$ such that $U$ intersects only finitely many $\supp f_\alpha$. In other words, there are only finitely many $f_\alpha$ such that $f_\alpha(p)\neq0$
+
+\defn
+
+Let $M$ be a smooth manifold with open cover $\ms{U} = \{U_\alpha\}$. A \underline{partition of unity subordinate to $\ms{U}$} is a collection $\{\psi_\alpha\in C^\oo(M)\}$ such that
+\begin{enumerate}[label=(\roman*)]
+
+\item $0\leq\psi_\alpha\leq1$
+
+\item $\supp\psi_\alpha\subset U_\alpha$
+
+\item $\{\supp\psi_\alpha\}$ is locally finite
+
+\item $\sum_\alpha\psi_\alpha \equiv 1$
+
+\end{enumerate}
+
+\thm[Existence of P.O.U]
+
+Given a manifold $M$ and open cover $\ms{U} = \{U_\alpha\}$, there is a partition of unity subordinate to $\ms{U}$.
+
+\exm[Separation property]
+
+For all $p\neq q$, there exists $f\in C^\oo(M)$ such that $f(p) = 1, f(q) = 0$. 
+
+Let $\ms{U} = \{U, V\}$, with $U = M\setminus\{p\},V = M\setminus\{q\}$. If there are $\psi_1,\psi_2$ satisfying $i-iv$, then $f = \psi_2$ will do. 
+
+\proof
+
+We now prove the theorem. 
+
+We will only do the case when $M$ is compact. For all $p \in M$, there exists a chart $(V_p,\phi_p)$ at $p$ such that $\phi_p(p) = 0$ and $\phi_p(V_p) \supset \bar{B_2(0)}$ and $V_p \subset U_{\alpha(p)}$. 
+
+Let $W_p = \phi_p^{-1}(B_1(0)) \ni p$. Then $\{W_p\}_{p\in M}$ is an open cover of $M$. By compactness, there is a finite subcover $W_1 = W_{p_1}, \cdots, W_k = W_{p_k}$
+
+Set $\phi_i = \phi_{p_i}$ and $f_i = H\circ\phi_i\in C^\oo(M)$. 
+
+Then $f_i\equiv1$ on $W_i$, $\supp f_i \subset V_i = V_{p_i} \subset U_{\alpha(p_i)}$. 
+
+Since $\{W_1,\dots,W_k\}$ covers $M$, $\sum_{i=1}^k f_i \geq 1$. 
+
+So we can simply take $g_i = \frac{f_i}{\sum_{i=1}^kf_i}\in C^\oo(M)$, so $\sum_{i=1}^kg_i \equiv 1$. 
+
+Recall that $V_i \subset U_{\alpha(i)}$, $i = 1, \dots, k$. Put $\psi_\alpha = \sum_{\alpha(i) = \alpha}g_i$. 
+
+This is in $C^\oo(M)$, and $\supp\psi_\alpha \subset U_{\alpha(i) = \alpha}\supp g_i \subset U_\alpha$
+
+and $\sum_\alpha\psi_\alpha = \sum_ig_i \equiv 1$
+
+\qed
+
+If $M$ is not compact, we have the following theorem. 
+
+\thm
+
+A manifold is always paracompact, i.e. any open cover has a locally finite refinement. In fact, for any open cover $\ms{U} = \{U_\alpha\}$, there ix a countable open cover $\{V_i\}$ such that
+\begin{enumerate}[label=(\roman*)]
+
+\item $\{V_i\}$ is locally finite
+
+\item $\{V_i\}$ is a refinement of $\ms{U}$, i.e. $V_i \subset U_{\alpha(i)}$ 
+
+\item Each $V_i$ is a domain of a normalized chart.
+
+\end{enumerate}
+
+\proof
+
+This follows from second countability. 
+
+\qed
+
+\section*{Lecture 7, 10/19/23}
+
+\subsection*{\underline{Chapter 3: Tangent vectors and tangent spaces}}
+
+Theree are two views of tangent spaces of $\R^n$: geometric or abstract. 
+
+For an $a\in\R^n$, we denote the tangent space at $a$ as $T_a\R^n$. For $\R^n$, we identify it with its tangent space at any point. 
+
+Indeed, a tangent vector at $a$ is a vector ``based" at $a$, a pair $(v, a)$, denoted $v_a$. 
+
+We can't do this on a manifold!
+
+We will take a different viewpoint. Instead of thinking about directions, which represent tangent vectors, we're gonna look at directional derivatives. 
+
+Instead of a $v_a\in T_a\R^n$, we're gonna consider the directional derivative 
+\[
+D_{v_a}:C^\oo(\R^n) \to \R
+\]
+This will act by 
+\[
+f \mapsto \frac{d}{dt}|_{t = 0}f(a + tv)
+\]
+
+This is the abstract viewpoint.
+
+Now, we can't replicate the geometric viewpoint on a manifold, but we can replicate the abstract viewpoint. 
+
+The directional derivative satisfies the following:
+\begin{itemize}
+
+\item $D_{v_a}$ is linear
+
+\item $D_{v_a}$ satisfies the Leibniz rule. That is, given two smooth functions $f, g \in C^\oo(\R^n)$, 
+\[
+D_{v_a}(fg) = f(a)D_{v_a}g + g(a)D_{v_a}f
+\]
+
+\end{itemize}
+
+\defn
+
+A \underline{derivation at $a$} is a linear map $X:C^\oo(\R^n)\to\R$ satisfying the Leibniz rule:
+\[
+X(fg) = f(a)(Xg) + g(a)(Xf)
+\]
+
+\exm
+
+$D_{v_a}$ is a derivation at $a$
+
+\subsubsection*{\underline{Notation}}
+\[
+\widetilde{T_a\R} = \{X \mid X\text{ derivation at }a\}
+\]
+
+Note that $\widetilde{T_a\R}$ is a vector space
+
+\exm
+
+Let $v_a = (e_i, a)$. Then $D_{v_a}(f) = \frac{d}{dt}|_{t=0}f(a + te_i) = \pp{f}{x_i}$. 
+
+So we write $D_{v_a} = \pp{}{x_i}|_a$ for $v_a = (e_i, a)$
+
+In general $v = (v_1, \dots, v_n)$, 
+\[
+D_{v_a}f = \dd{}{t}|_{t=0}f(a + tv) = \sum_{i=1}^n\pp{f}{x_i}(a)v_i
+\]
+
+\prop
+
+The map $T_a\R^n\to\widetilde{T_a\R^n}$ given by $v_a \mapsto D_{v_a}$ is a linear isomorphism. 
+
+\proof
+
+\underline{Remark:}
+
+We can identify the geometric tangent space $T_a\R^n$ and the abstract tangent space $\widetilde{T_a\R^n}$. We will do that in this class. Now for the proof
+
+\begin{enumerate}[label=(\roman*)]
+
+\item The map is linear: $(v_a + w_a) = (v + w)_a$, and $D_{v_a} + D_{w_a} = D_{(v + w)_a}$
+
+\item Injective: Let $v_a \in T_a\R^n$ be such that $D_{v_a} = 0$, i.e. $D_{v_a}f = 0$. But if $v_a=(v_1, \dots, v_n)_a$, then $D_{v_a}f = \sum_{i=1}^n\pp{f}{x_i}(a)v_i$ for all $f \in C^\oo(\R^n)$. So setting $f(x) = x_i$, we get that $v_i = 0$ so $v = 0$, i.e. $v_a$ is the zero vector. 
+
+\item Surjective: for any $X:C^\oo(\R^n)\to\R$ derivation at $a$, there exists some $v_a \in T_a\R^n$ so that $X = D_{v_a}$, i.e. $Xf = D_{v_a}f$ for all $f \in C^\oo(\R^n)$. We will need two lemmas
+
+\end{enumerate}
+
+
+\lem
+
+\begin{enumerate}
+
+\item If $f$ is a constant function, then $Xf = 0$. 
+
+\item If $f, g \in C^\oo(\R^n)$ with $f(a) = g(a) = 0$, then $X(fg) = 0$
+
+\end{enumerate}
+
+\proof
+
+\begin{enumerate}
+
+\item First let $f\equiv1$. 
+\begin{align*}
+X(1) & = X(1\cdot 1) \\
+	  & = 1\cdot X(1) + 1\cdot X(1) \\
+	  & = 2X(1)
+\end{align*}
+So $X(1)$ must be zero. 
+
+In general if $f\equiv c$ for some constant $c$, because $X$ is linear we have $X(c) = c\cdot X(1) = 0$. 
+
+\item This is a simple application of the Leibniz rule
+
+\end{enumerate}
+
+\qed
+
+\lem[Taylor expansion with remainder]
+
+For all $f \in C^\oo(\R^n)$, $f(x) = f(a) + \sum_{i=1}^ng_i(x)(x_i - a_i)$ where $g_i \in C^\oo(\R^n)$ and $g_i(a) = \pp{f}{x_i}(a)$
+
+\proof
+
+By FTC, 
+\begin{align*}
+f(x) - f(a) & = \int_0^1\dd{}{t}(f(a + t(x - a)))\,dt a \\
+				& = \int_0^1\sum_{i=1}^n\pp{f}{x_i}(a + t(x - a))\cdot(x_i - a_i) \\
+				& = \sum_{i=1}^n(x_i-a_i)\underbrace{\int_0^1\pp{f}{x_i}(a + t(x - a))\,dt}_{g_i(x)} \\
+\end{align*}
+
+\qed
+
+Back to the proof of surjectivity:
+
+Given $X \in T_a\R^n$ we want to find $v_a\in T_a\R^n$ such that $X = D_{v_a}$, i.e. $Xf = D_{v_a}f$ for all $f \in C^\oo(\R)$
+
+But the second lemma reduces arbitrary smooth function to 
+\[
+f = \underbrace{f(a)}_{\text{constant}} + \sum_{i=1}^ng_i(x)(x_i - a_i)
+\]
+By linearity, 
+\begin{align*}
+Xf & = \underbrace{X(f(a))}_{=0} + \sum_{i=1}^nX(g_i(x_i -a_i)) \\
+   & = \sum_{i=1}^n\left(X(g_i)\underbrace{(x_i-a_i)|_{a}}_{=0} + g_i(a)X(x_i-a_i)\right) \\
+	& = \sum_{i=1}^n\pp{f}{x_i}(a)\underbrace{X(x_i - a_i)}_{\text{scalar}}
+\end{align*}
+
+The equation $Xf = D_{v_a}f$ thus becomes 
+\[
+\sum_{i=1}^n\pp{f}{x_i}(a)X(x_i-a_i) = \sum_{i=1}^n\pp{f}{x_i}a(v_i)
+\]
+To make this true, we can simply pick $v_i = X(x_i - a_i)$, and the equation will always hold, no matter what $f$ is. 
+
+\qed
+
+\subsubsection*{\underline{Upshot}}
+
+We have $T_a\R^n \cong \widetilde{T_a\R^n}$
+
+We identify $(e_i)_a$ with $\pp{}{x_i}|_a (= D_{(e_i)_a})$
+
+So $(v_1, \dots, v_n)$ is identified with $\sum_{i=1}^nv_i\pp{}{x_i}|_a$
+
+We will now define the latter on manifolds. 
+
+\section*{Lecture 8, 10/24/23}
+
+\defn
+
+Let $M^n$ be a smooth manifold. For $p\in M$, a \underline{derivation at $p$} is a linear map
+\[
+X:C^\oo(M)\to\R
+\]
+satisfying the Leibniz rule at $p$, meaning that
+\[
+X(fg) = f(p)X(g) + g(p)X(f)
+\]
+
+\defn
+
+The \underline{tangent space of $M$ at $p$} is the vector space of all derivations at $p$, denoted $T_pM$. Members of this space will be called \underline{tangent vectors}.
+
+\exm
+
+Let $\varepsilon>0$, and consider $c:(-\varepsilon,\varepsilon)\to M^n$. If this is $C^\oo$ it's called a \underline{curve}.
+
+Let $p = c(0)$. 
+
+\defn
+
+We define $\dot{c}(0) \in T_pM$ by defining how it acts on $C^\oo(M)$ as follows. 
+
+\[
+\dot{c}(0)(f) = \frac{d}{dt}|_{t=0}f(c(t))
+\]
+
+\underline{Remark}
+
+$T_pM$ is a vector space over the reals. 
+
+
+It is really easy from here to define the pushforward/differential of a map. 
+
+Let $M, N$ be smooth manifolds, and let $F:M\to N$ be smooth. Let $p \in M$. Then $F$ ``naturally" induces a linear map $F_*:T_pM\to T_{F(p)}N$ as follows. 
+
+Let $X \in T_pM$. Then $F_*(X) \in T_{F(p)}N$ acts on $C^\oo(N)$ by 
+\[
+F_*(X)(f) = X(f\circ F)
+\]
+
+(check that this defines a derivation).
+
+We also denote this as $dF$.
+
+\prop[Basic Properties]
+\,
+\begin{enumerate}
+
+\item $F_*$ is linear
+
+\item If $F:M\to N$ and $G:N\to P$, then $(G\circ F)_* = G_*\circ F_*$. That is, $_*$ is \textbf{functorial!}
+
+\item $\Id_M:M\to M$ gives $(\Id_M)_{*,p} = \Id_{T_pM}$
+
+\item If $F$ is a diffeomorphism, then $F_*:T_pM\to T_{F(p)}N$ is a linear isomorphism.
+
+\end{enumerate}
+
+\proof
+\,
+
+4 follows from 1-3. If $F^{-1}\circ F = \Id_M$, then $(F^{-1}\circ F)_* = \Id_{T_pM}$. But this is also $F^{-1}_* \circ F_*$, so for their composition to be the identity (and the same argument shows the reverse composition is the identity on $N$), both have to be isomorphisms. 
+
+We now prove 1. Think
+
+We now prove 2. We claim that.
+\begin{align*}
+(G\circ F)_*(X) & = (G_*\circ F_*)(X) \\
+\end{align*}
+We check that 
+\[
+(G\circ F)_*(X)f = X(f\circ(G\circ F))
+\]
+ and 
+\[
+(G_*\circ F_*)(X)f = G_*(F_*(X)))f = F_*(X)(f\circ G) = X((f\circ G) \circ F)
+\]
+\qed
+\,
+
+But what is $T_pM$? In particular, is it local? That is, does it depend only on info in a neighborhood of $p$? 
+
+\prop
+
+Let $X:C^\oo(M)\to \R$ be a derivation at $p$, and $f, g \in C^\oo(M)$. If there is an open $U \ni p$ such that $f|_U = g|_U$ then $Xf = Xg$. 
+
+\proof
+
+We want to show $X(f - g) = 0$. 
+
+Let $h = f - g \in C^\oo(M)$. Then $h|_U \equiv 0$. 
+
+$p \in U$, so there is a $\chi \in C^\oo(M)$ such that $\chi(p) = 0$ and $\chi \equiv 1$ outside $U$. Note that $h = \chi h$. 
+
+This implies $X(h) = X(\chi h) = \chi(p)Xh + h(p)X\chi$. $\chi(p) = 0$, and $h$ vanishes at $p$, so $X(h) = 0$. 
+
+\qed
+
+\underline{Remark}
+
+Another way to get the ``locality" is to define a tangent vector at $p$ to be a derivation on the space of ``germs" of $C^\oo$ functions defined only near $p$. 
+
+\cor[Locality]
+
+Let $U \subseteq M$ be open. Then for any $p \in U$, $T_pM \cong T_pU$.
+
+\proof
+
+Note that we have the canonical inclusion $i:U\to M$ which is a smooth map. Therefore we have a linear map $i_*:T_pU\to T_pM$
+
+To show this is a linear isomorphism, we have to construct the inverse by hand. 
+
+We define
+\[
+\sigma:T_pM\to T_pU
+\]
+as follows. For $X \in T_pM$, $f\in C^\oo(U)$, $\sigma(X)f = X(\chi f)$, where $\chi$ is a bump function at $p$. $\sigma$ is well-defined by previous lemma. 
+
+
+
+We continue the proof next time.
+
+
+
+\qed
+
+
+\section*{Lecture 9, 10/26/23}
+
+\prop
+
+Let $M^n$ be a smooth $n-manifold$. Then for any $p \in M$, $\dim T_pM = \dim M = n$
+
+In fact, if $(U, \phi)$ is a smooth chart, then
+\[
+E_i = \phi_*^{-1}\left(\pp{}{x_i}\right), i = 1, \dots, n
+\]
+is a basis of $T_pM$.
+
+\proof
+
+By locality, for any open $U \ni p$, $T_pM \cong T_pU$. By pushforward via $\phi$, this is isomorphic to $T_{\phi(p)}\phi(U)$. But $\phi(U) \subseteq \R^n$ is open, so again by locality $T_{\phi(p)}\phi(U) \cong T_{\phi(p)}\R^n$. 
+
+Now, recall that a basis for $T_{\phi(p)}\R^n$ consists of
+\[
+\pp{}{x_i}|_{\phi(p)}, i = 1, \dots, n
+\]
+
+\qed
+
+Now, let $F:M^n\to N^m$ be smooth. 
+
+If $(U, \phi)$ is a chart at $p$, we have a basis for $T_pM$ consisting of 
+\[
+E_i = (\phi^{-1})_*\left(\pp{}{x_i}\right), \,i = 1, \dots, n
+\]
+Similarly, if $(V, \psi)$ is a chart at $F(p)$, we have a basis for $T_{F(p)}N$ consisting of
+\[
+\tilde{E}_j = (\psi^{-1})_*\left(\pp{}{y_j}\right), \,i = 1, \dots, m
+\]
+
+\prop
+
+With respect to these bases, the matrix of $F_*:T_pM\to T_{F(p)}N$ is given by the jacobian matrix 
+\[
+\left(\pp{\hat{F}_j}{x_i}\right),\, \hat{F} = \psi\circ F \circ \phi^{-1}
+\]
+
+\proof
+
+We need to express $F_*(E_i)$ as a linear combination of the $\tilde{E}_j$s. But by definition, 
+\begin{align*}
+F_*(E_i) & = F_*\left((\phi^{-1})_*\left(\pp{}{x_i}\right)\right)\\
+			& = (F\circ\phi^{-1})_*\left(\pp{}{x_j}\right) \\
+			& = (\psi^{-1}\circ\psi)_*\circ(F\circ\phi^{-1})_* \\
+			& = (\psi^{-1})_* \circ (\overbrace{(\psi\circ F \circ \phi^{-1})}^{\hat{F}})_*\left(\pp{}{x_i}\right)
+\end{align*}
+
+\claim 
+
+\[
+\hat{F}_*\left(\pp{}{x_i}\right) = \sum_{j=1}^m\pp{\hat{F}_j}{x_i}\pp{}{y_j}
+\]
+
+\proof
+
+We put it off for a little bit, but, granted the claim, we have that
+
+\begin{align*}
+F_*(E_i) & = (\psi^{-1})_*\left(\sum_{j=1}^m\pp{\hat{F}_j}{x_i}\pp{}{y_j}\right) \\
+			& = \sum_{j=1}^M \pp{\hat{F_j}}{x_i} \underbrace{(\psi^{-1})_*\left(\pp{}{y_j}\right)}_{\tilde{E}_j} \\
+\end{align*}
+
+To establish the claim, we compute, for all $f \in C^\oo(\psi(V))$, 
+\begin{align*}
+\hat{F}_*\left(\pp{}{x_i}\right) f & = \pp{}{x_i}(f\circ\hat{F}) \\
+									& = \pp{}{x_i}f(\hat{F}_1(x_1,\dots,x_n),\cdots,\hat{F}_m(x_1,\dots,x_n)) \\
+									& = \sum_{j=1}^m\pp{f}{y_j}\pp{\hat{F}_j}{x_i} \\
+									& = \left(\sum_{j=1}^m\pp{\hat{F}_j}{x_i}\pp{}{y_j}\right)f
+\end{align*}
+
+\qed
+
+\cor
+
+Suppose $p \in M$ and $(U, \phi), (V,\psi)$ smooth charts at $p$. We have two bases for $T_pM$, 
+\begin{align*}
+E_i & = (\phi^{-1})_*\left(\pp{}{x_i}\right)_* \\
+\tilde{E}_i & = (\psi^{-1})_*\left(\pp{}{x_i}\right) \\
+\end{align*}
+
+These are related by 
+\[
+E_i = \sum_{j=1}^n \pp{(\psi\circ\phi^{-1})_j}{x_i} \tilde{E}_j
+\]
+
+\proof
+
+Apply $F = \Id_M$ for 
+\[
+E_i = \sum_{j=1}^n\pp{(\psi\circ F \circ\phi^{-1})_j}{x_i}\tilde{E}_j
+\]
+
+\qed
+
+Going back to curves, let $c:(-\varepsilon,\varepsilon_\to M^n$ a curve at $p$, i.e. $c(0) = p$. 
+
+Recall $\dot{c}(0) \in T_pM$, $\dot{c}(0) = c_*(\dd{}{t}|_{t=0})\in T_pM$
+
+\underline{Fact} All tangent vectors are of this form.
+
+In the homework, we want to show that $T_pS^n$ is naturally isomorphic to the hyperplane perpindicular to $S^n$ at $p$. 
+
+Use the canonical inclusion $i:S^n\to \R^n$, giving us an induced map $i_*(T_pS^n)\to T_p\R^{n + 1} \cong \R^{n + 1}$. 
+
+\claim
+
+$i_*$ is injective. Therefore we can identify $T_pS^n$ with its image $i_*(T_pS^n) \subset T_p\R^{n + 1} \cong \R^{n + 1}$.
+
+\proof
+
+It is tricky to do by definition. Alternatively, note that $\pi:\R^{n + 1}\setminus\{0\} \to S^n$ given by $x\mapsto\frac{x}{|x|}$ is a smooth, $\pi\circ i = \Id$, and once we have that, $\pi_*\circ i_* = \Id$, so $i_*$ is injective.
+
+\qed
+
+To see that $i_*(T_pS^n) \cong $hyperplane perpendicular to $p$, we have
+\[
+i_*(\dot{c}(0)) = \dot{(i\circ c)}(0)
+\]
+\[
+\tilde{c} = i\circ c(t) = (c_1(t), \dots, c_{n + 1}(t))
+\]
+$\dot{\tilde{c}}(0) = ?$
+
+\subsection*{\underline{Tangent bundles}}
+
+Let $M$ be a manifold. 
+
+We have the tangent bundle $TM = \coprod_{p\in M}T_pM$ as a set. Elements have the form $(p, v)$, with $v \in T_pM$ 
+
+\underline{Goal}: We want to put a topology and smooth structure on $TM$ such that $\pi:TM\to M$, sending $(p, v) \to p$, is smooth.
+
+We will first put a chart on it. 
+
+Let $\{(U_\alpha,\phi_\alpha)\}$ be a smooth atlas of $M$. We will construct a smooth atlas 
+
+$\{(\tilde{U}_\alpha = \pi^{-1}(U_\alpha),\tilde{\phi}_\alpha)\}$ for $TM$. 
+
+We define $\tilde{\phi}_\alpha:\pi^{-1}(U_\alpha) \to \phi_\alpha(U_\alpha)\times\R^n$, 
+\[
+(p, v) \mapsto (\phi_\alpha(p), (v^1, \dots, v^n))
+\]
+where $v = \sum_{i=1}^nv^i E_i$, with $E_i$ the standard basis, $E_i = (\phi_\alpha^{-1})_*\left(\pp{}{x_i}\right)$
+
+We have to check smooth compatibility. We have
+\begin{align*}
+(\tilde{\phi_\beta} \circ \tilde{\phi_\alpha}^{-1})(x_1, \dots, x_n, v^1, \dots, v^n) & = \tilde{\phi_\beta}(\phi_\alpha^{-1}(x), \sum_{i=1}^nv^iE_i \\
+							  & = ((\phi_\beta\circ\phi_\alpha^{-1})(x), ?)
+\end{align*}
+
+To figure out what ? should be, we need an expression of $\sum_{i=1}^nv^iE_i$ in the basis $\tilde{E}_i = (\phi_\beta^{-1})_*\left(\pp{}{x_i}\right)$. 
+
+But by an earlier proposition, 
+\[
+E_i = \sum_{j=1}^n\pp{(\phi_\beta\circ\phi_\alpha^{-1})_j}{x_i}\tilde{E}_j = \sum_{i=1}^n\sum_{j=1}^n v^i\pp{(\phi_\beta\circ\phi_\alpha^{-1})_j}{x_j}\tilde{E}_j = \sum_{j=1}^n\underbrace{\left(\sum_{i=1}^nv^i\pp{(\phi_\beta\circ\phi_\alpha^{-1})_j}{x_i}\right)}_{\text{use as}?}\tilde{E}_j
+\]
+
+
+\section*{Lecture 10, 10/31/23}
+
+\subsection*{\underline{Chapter 4: Submersions, Immersions, $\&$ embeddings}}
+
+Let $F:M^n\to N^m$ be a smooth map of smooth manifolds. For $p \in M$, we have the differential $dF_p = F_{*,p}:T_pM\to T_{F(p)}N$
+
+The idea is that this is supposed to be a linear approximation to nonlinear objects. We explore in what sense this is true. 
+
+\defn
+\,
+
+\begin{enumerate}[label=(\alph*)]
+
+\item We say $F$ is an \underline{immersion at $p$} if $F_{*,p}:T_pM\to T_{F(p)}N$ is injective. $F$ is an \underline{immersion} if it is an immersion at all points. 
+
+\item We say $F$ is a \underline{submersion at $p$} if $F_{*,p}:T_pM\to T_{F(p)}N$ is surjective. $F$ is a \underline{submersion} if it is a submersion at all points. 
+
+\end{enumerate}
+
+\underline{Remark}
+
+If $F$ is an immersion/submersion at $p$, then $F$ is so in a neighborhood of $p$. 
+
+The matrix of $F_{*,p}$ is the Jacobian of $\hat{F} = \psi \circ F \circ \phi^{-1}$. , which is $\left(\pp{\hat{F}_j}{x_i}\right)_{n\times m}$. 
+
+If $F_{*,p}$ is injective, then the det of $n\times n$ submatrix is nonzero. If $F_{*,p}$ is surjective, then the det of $m\times m$ submatrix is nonzero. The reverse direction is true for both.
+
+Both of these determinants vary continuously, so the remark is proven. 
+
+\defn
+
+$\rank_pF = \rank(F_{*,p}:T_pM\to T_{F(p)}N) = \dim\Im F_{*,p}$. This is less than or equal to $\min(n, m)$, which is the rank of the Jacobian of $\hat{F}$ at $p$. 
+
+\underline{Remark}
+
+$F$ an immersion at $p \implies$ $\rank_pF = n \leq m$
+
+$F$ a submersion at $p \implies$ $m \leq n$
+
+\exm
+
+Consider $c:(-1,1)\to\R^3$ given by $c(t) = (c_1(t), c_2(t), c_3(t))$
+
+This is an immersion if $\dot{c}\neq0$. We can think of $\dot{c}(t)$ as $c_*\left(\dd{}{t}\right)$. 
+
+If $c$ is an immersion, we call it a regular curve. (The image of $c$ looks ``smooth" in $\R^3$)
+
+Consider
+\[
+c(t) = \begin{cases} (e^{-\frac{1}{t}}, e^{-\frac{1}{t}}, 0) & t > 0 \\ 0 & t = 0\\ (e^{\frac{1}{t}}, -e^{\frac{1}{t}},0) & t < 0 \end{cases}
+\]
+
+This is $C^\oo$. But $\dot{c}(0) = 0$, so this is not an immersion. 
+
+\exm
+
+If we have $\sigma:U \to \R^3$ where $U \subseteq \R^2$ is $C^\oo$, this is the same as $\sigma$ being a regular surface. 
+
+\thm[Rank Theorem]
+
+Let $F:M^n\to N^m$ be a $C^\oo$ function with constant rank, i.e. $\rank_pF = k$ for all $p \in M$. 
+
+Then for all $p \in M$, there are charts $(U,\phi)$ at p and $(V,\psi)$ at $F(p)$ such that $F(U) \subseteq V$, and
+\[
+\hat{F} = \psi\circ F \circ \phi^{-1}
+\]
+sends $(x_1, \dots, x_n) \in \phi(U)\subseteq\R^n$ to $(x_1, \dots, x_k, 0, \dots, 0) \in \psi(V) \subseteq \R^m$
+
+\exm
+
+Consider $F:\R^2\to\R^3$ given by $(x, y)\mapsto (x, y, f(x, y))$, with $f\in C^\oo(\R^2)$. 
+
+Then $\rank F = \rank dF = \rank \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ \pp{f}{x} & \pp{f}{y} \end{pmatrix} = 2$, which is constant. 
+
+Put $\psi:\R^3\to\R^3$ by  $(x, y, z) \mapsto (x, y, z - f(x, y)) = (u, v, w)$. This is a diffeomorphism! Then $(u, v, w)$ will be our new coordinate system.
+
+$\phi = \Id$ for $\R^2$, so 
+\[
+\psi\circ F(x, y) = \psi(x, y, f(x, y)) = (x, y, 0)
+\]
+Exactly as the rank theorem predicted. 
+
+In general, we'll use local diffeo's to modify our charts. This is easier to check than being a diffeomorphism. 
+
+\thm[Inverse Function Theorem]
+
+Let $U \subseteq \R^n$, and $G:U\to\R^n$ be $C^\oo$. Let $p \in U$ such that $dG_p = \left(\pp{G}{x_i}\right)_{n\times n}(p)$ is invertible. Then $G$ is a local diffeomorphism, i.e. there is an open neighborhood $p \in V \subseteq U$ such that $\tilde{V} = G(V)\subseteq\R^n$ is open and $G:V\to\tilde{V}$ is a diffeomorphism.
+
+\proof
+
+We first prove the rank theorem. 
+
+Because the function is $C^\oo$, there are charts $(\tilde{U},\tilde{\phi})$ at $p$, $(\tilde{V},\tilde{\psi})$ at $F(p)$, $F(\tilde{U})\subseteq \tilde{V}$, such that
+\[
+\tilde{F} = \tilde{\psi}\circ F \circ \tilde{\phi}^{-1}:\phi(\tilde{U})\to \psi(\tilde{V})
+\]
+
+with $\rank \tilde{F} = k$. 
+
+For simplicity, assume $n = m = 2$ and $k = 1$. 
+
+$\tilde{F}:(x,y)\mapsto \tilde{F}(x, y) = (\tilde{F}^1(x, y), \tilde{F}^2(x, y))$. 
+\[
+1\equiv\rank \tilde{F} = \rank\begin{pmatrix} \pp{\tilde{F}^1}{x} & \pp{\tilde{F}^1}{y} \\ \pp{\tilde{F}^2}{x} & \pp{\tilde{F}^2}{y} \end{pmatrix}
+\]
+
+\underline{Goal:}
+
+We want to modify $(\tilde{U},\tilde{\phi})$ by diffeos so that 
+\[
+\psi \circ F \circ \phi^{-1} (x, y) = (x, 0)
+\]
+Where $\psi = \tilde{\psi}\circ G, \phi = \tilde{\phi} \circ H$, with $G, H$ local diffeomorphisms.
+
+\subsubsection*{\underline{Step 1}}
+
+$G:\R^2\to\R^2$ given by $(x, y) \mapsto (\tilde{F}^1(x, y), y)$
+
+Without loss of generality, $\pp{\tilde{F}^1}{x}(0)\neq0$. 
+
+To check $G$ is a local diffeomorphism at 0, by the inverse function theorem, we just need to show that 
+\[
+dG_0 = \begin{pmatrix} \pp{\tilde{F}^1}{x} & \pp{\tilde{F}^1}{y} \\ 0 & 1 \\ \end{pmatrix}
+\]
+is indeed invertible, so $G$ is a local diffeomorphism.
+
+Recall $G(x, y) = (x^1,x^2) = (\tilde{F}^1(x, y), y)$
+
+Check: $\tilde{F}\circ G^{-1} = \tilde{\psi}\circ F\circ\underbrace{\tilde{\phi}^{-1} \circ G^{-1}}_{(G\circ\tilde{\phi})^{-1}}$
+
+Simplifies, i.e. $\tilde{F}\circ G^{-1}(x^1,x^2) = \tilde{F}(x, y) = (\tilde{F}^1(x, y), \tilde{F}^2(x, y)) = (x^1, \bar{\tilde{F}^2}(x^1, x^2))$
+
+\subsubsection*{\underline{Step 2}}
+jby6,m
+$\rank\tilde{F} \equiv 1$ so $\bar{\tilde{F}}(x^1, x^2)$ will depend only on the first variable. 
+
+\subsubsection*{\underline{Step 3}}
+
+$H:(x^1,x^2)\to(x^1,x^2 - f(x'))$. 
+
+\section*{Lecture 11, 11/2/23}
+
+\subsubsection*{Consequences of rank theorem}
+\begin{itemize}
+
+\item If $F$ is an immersion, then locally, $\hat{F}(x_1, \dots, x_n) = (x_1, \dots, x_n, 0, \dots, 0)$, so it is locally injective.
+
+\item If $F$ is a submersion, then locally $\hat{F}(x_1, \dots, x_n) = (x_1, \dots, x_m)$, so it is locally surjective. 
+
+In fact, $F$ must be an open map. In particular, if $N$ is connected, then $F$ is onto. 
+
+\end{itemize}
+
+\subsubsection*{\underline{Embeddings}}
+
+\defn
+
+A $C^\oo$ map $F:M\to N$ is an embedding if 
+\begin{enumerate}
+
+\item $F$ is a 1-1 immersion
+
+\item If we give $F(M) \subset N$ the subspace topology, then $F:M\to F(M)$ is a homeomorphism, i.e. $F^{-1}:F(M)\to M$ is continuous. 
+
+\end{enumerate}
+
+Question: when will a 1-1 immersion be an embedding?
+
+\prop
+
+Let $F:M\to N$ be a 1-1 immersion. Then $F$ is an embedding if any of the following holds:
+
+\begin{enumerate}[label=(\alph*)]
+
+\item $F$ is an open or closed map
+
+\item $F$ is a proper map, meaning the preimage of any compact set is compact. 
+
+\item $M$ is compact.
+
+\end{enumerate}
+
+\proof
+
+Clearly, $c)$ follows from $b)$. 
+
+It will suffice to show $F^{-1}:F(M)\to M$ is continuous. 
+
+$a)$ is trivial by definition.
+
+So we wil show $b$ implies $a$. We will show $F:M\to N$ is a closed map. 
+
+Let $C \subseteq M$ be a closed set. We want to show $F(C)$ is closed. Let $q$ be a limit point of $F(C)$
+
+$q\in N$, and there is $U \ni q$ such that $\bar{U}$ is compact. 
+
+Because $F$ i proper, $F^{-1}(\bar{U})$ is compact, so $C \cap F^{-1}(U)$ is also compact. 
+
+So $F(C\cap F^{-1}(U))$ is also compact. But this is equal to $F(C) \cap \bar{U}$, so $Q \in F(C) \cap \bar{U}$. 
+
+So $q\in F(C)$. 
+
+\qed
+
+\underline{Remark}
+
+If $F:M\to N$ is a 1-1 immersion and $M$ is compact, then $F$ is an embedding. 
+
+\exm
+
+$i:S^n\into\R^{n + 1}$ is an embedding
+
+\thm
+
+Let $F:M\to N$ be an immersion.
+
+Then $F$ is locally an embedding, i.e. for all $p \in M$, there is an open $U \ni p$ such that $F|_U:U\to N$ is an embedding.
+
+\exm
+
+Consider $\gamma:(-\pi,\pi)\to\R^2$ given by $\gamma(t) = (\sin(2t),\sin(t))$. This is a 1-1 immersion but not an embedding. 
+
+However, it is locally an embedding. 
+
+\proof
+
+By the rank theorem, there are charts $(U, \phi)$ at $p$ and $(V,\psi)$ at $F(P)$ such that $F(U) \subset V$ and $\hat{F} = \psi \circ F \circ \phi^{-1}:\phi(U) \to \psi(V)$ is given by $x \mapsto (x, 0)$, which is a 1-1 immersion. 
+
+By shrinking $U$ if necessary, we can assume that $\bar{U}$ is compact so $F:U\to F(U)$ is a closed map. 
+
+\qed
+
+\exm
+
+Consider $F:\R\to T^2$, the torus, where we think of $T^2$ as $\R^2/\Z^2$
+
+\section*{Lecture 12, 11/7/23}
+
+\subsection*{\underline{Chapter 5: (Embedded) Submanifolds}}
+
+One way manifolds arise is as the images of ``nice" maps. 
+
+\defn
+
+Given a smooth manifold $M^m$, a subset $S \subseteq M$ is an 
+
+\underline{embedded/regular submanifold of dimension $k$}  if for all $p \in S$, there exists a chart $(U, \phi)$ of $M$ at $p$, such that 
+\begin{enumerate}
+
+\item $\phi(p) = 0 \in \R^m$
+
+\item $\phi(U\cap S) = \phi(U) \cap \{\R^k\times\{0\}\}$, where we view $0$ as an element of $\R^{m - k}$ 
+
+\end{enumerate}
+
+\underline{Question:} If $S$ a manifold? 
+
+Yes. 
+\begin{enumerate}
+
+\item $S$ has subspace topology, so is automatically Hausdorff and second countable. 
+
+\item $S$ has a smooth atlas given by $\{(U \cap S,\pi\circ \phi|_S)\}$, e.g. $(\pi\circ\psi)\circ(\pi\circ\phi)^{-1} = \pi\circ(\psi\circ\phi^{-1})\circ i$ which is smooth.
+
+\end{enumerate}
+
+The upshot is that $S$ inherits both the topology and the smooth structure of the ambient manifold, which makes itself a smooth manifold. 
+
+Remark:
+
+If $S \subseteq M$ is an embedded submanifold, then $i:S\into M$ is an embedding.
+
+\subsubsection*{\underline{First Goal:}}
+
+Show that the image of an embedding is an embedded submanifold. 
+
+\prop
+
+If $F:N^n\to M^m$ is an embedding, then $S = F(N)$ is an embedded submanifold of $M$, and $F:N\to S$ is a diffeomorphism. 
+
+\proof
+
+$F$ is an immersion, so for all $p \in S = F(N)$, there are charts $(U, \phi)$ of $N$ at $p$ and $(V, \psi)$ of $M$ at $F(p)$. Since $F$ is an embedding, $F(U)$ is open in the subspace topology. 
+
+But $F(U) = F(N) \cap W$, $W \subseteq M$ open, so without loss of generality, $W \subseteq V$, so $(F(U) \subseteq V)$. 
+
+We claim that $(W, \psi|_W)$ is the desired ambient chart. 
+
+i.e. $\psi(S \cap W) = \psi(W) \cap (\R^k\times\{0\})$
+
+Indeed, for all $q \in S \cap W = F(N) \cap W = F(U)$, $q = F(p)$ for some $p\in U$. So 
+\begin{align*}
+\psi(q) & = \psi(F(p)) \\
+					& = \hat{F}(\phi(p)) \in \R^k\times\{0\} \\
+					& = \psi\circ F \circ \phi^{-1} \\
+\end{align*}
+
+\qed
+
+So embedded submanifolds are exactly the images of embeddings. 
+
+Alternatively, we can view them as being defined by level sets of nice maps. 
+
+\thm[Constant Rank Level Set Theorem]
+
+Let $F:N^n\to M^m$ be $C^\oo$ with rank $F \equiv k$. Then for all $q \in M$, $F^{-1}(q)$ is am embedded submanifold of $N$ with dimension $n - k$.
+
+\proof
+
+Another application of Rank theorem. Let $S = F^{-1}(q) \subseteq N$. For all $p \in S$, there are charts $(U, \phi)$ of $N$ at $p$, $(V, \psi)$ of $M$ at $F(p)$ such that $F(U) \subseteq V$ and $\hat{F} = \psi\circ F \circ \phi^{-1}:\phi(U)\to \psi(V)$ sends $(x_1, \dots, x_n)$ to $(x_1, \dots, x_k, 0, \dots, 0)$.
+
+We claim $(U, \phi)$ is an ambient chart, i.e. that $\phi(S\cap U) = \phi(U) \cap $slice. 
+
+Indeed, for any $\tilde{p}\in S\cap U$, $\phi(\tilde{p}) = (\underbrace{0, \dots, 0}_{k}, *, \dots, *)$
+
+\qed
+
+\section*{Lecture 13}
+
+Missed it
+
+\section*{Lecture 14, 11/14/23}
+
+\defn
+
+A \underline{vector field} on an open set $U \subseteq M$ is a smooth map $X:U\to TU$ such that $\pi \circ X = \Id_U$. I.e. $X(p) = (p, X_p)$ with $X_p \in T_pM$. 
+
+If $(U, \phi)$ is a chart, a basis for $T_pU$ is given by $E_i = (\phi^{-1})_*\left(\pp{}{x_i}\right)$. We will abuse notation by referring to $E_i$ as simply $\pp{}{x_i}$. 
+
+We can write 
+\[
+X_p = \sum_{i=1}^n X_i(p)\pp{}{x_i}
+\]
+
+Then $X$ is smooth if and only if $X_i \in C^\oo(U)$ for each $i$. 
+
+\prop
+
+$X$ is a vector field on $M$ if and only if $X:C^\oo(M)\to C^\oo(M)$ given by $f \mapsto Xf$, where $Xf$ is given by $Xf(P) = X_pf$, is a derivation at $p$, i.e. 
+\begin{enumerate}
+
+\item Linear: $X(c_1f + c_2g) = c_1Xf + c_2Xg$
+
+\item Leibniz: $X(fg) = (Xf)g + f(Xg)$
+
+\end{enumerate}
+
+\proof
+
+We start with $``\implies"$. Given $X$ a vector field on $M$, we need to check that 
+
+\begin{enumerate}
+
+\item $(Xf)(p) = X_pf$ defines a smooth function. Check in a coordinate chart $(U, \phi)$. If $X$ is a vector field, then
+\[
+X_p = \sum_{i=1}^n X_i(p) \pp{}{x_i}
+\]
+with $X_i(p) \in C^\oo(U)$. So $X_pf = \sum_{i=1}^n X_i(p)\pp{f}{x_i}$, which is the sum of products of smooth things and hence smooth. 
+
+\item We need to show $X$ is a derivation at $p$, which is obviously true. 
+
+\end{enumerate}
+
+Now for the opposite direction. That is, we want to show that if $X:C^\oo(M)\to C^\oo(M)$ is a derivation, then it defines a vector field. 
+
+I wasn't paying attention, sorry. 
+
+\qed
+
+We denote the st of all vector fields $X$ on $M$ as $\mathfrak{X}(M)$
+
+Let $F:M\to N$ be smooth, and let $X \in \mathfrak{X}(M)$. Then for each $p \in M$, we have a map $F_{*,p}:T_pM\to T_{F(p)}N$ which sends $X_p$ to $F_{*,p}(X_p)$. 
+
+Question: Will we get a vector field on $N$?
+
+No, because there are various issues:
+
+\begin{enumerate}
+
+\item $F$ may not be surjective
+
+\item $F$ may not be injective 
+
+\item Even if $F$ is bijective, the assignment might not be smooth. 
+
+
+\end{enumerate}
+
+
+Instead, we will assume there is a vector field on $N$ to start with. 
+
+\defn
+
+Let $F:M\to N$ be $C^\oo$, $X \in \mathfrak{X}(M), Y \in \mathfrak{X}(N)$. 
+
+We say $X, Y$ are \underline{$F$-related} if $F_*(X_p) = Y_{F(p)}$ for all $p \in M$. We abuse notation by saying that $Y = F_*(X)$. 
+
+This means the diagram commutes:
+\[
+\begin{tikzcd}
+C^\oo(N) \ar[r, "Y"] \ar[d, "F^*"] & C^\oo(N) \ar[d, "F^*"] \\
+C^\oo(M) \ar[r, "X"] & C^\oo(M) 
+\end{tikzcd}
+\]
+
+For any $f \in C^\oo(N), F_*(X_p)f = Y_{F(p)}f$
+
+$Yf \circ F = X(f \circ F)$
+
+Even though we cannot push forward a vector field in general, there is one important special situation where we can. 
+
+\prop
+
+If $F:M\to N$ is a diffeomorphism, and $X \in \mathfrak{X}(M)$ then there is a unique $Y \in \mathfrak{X}(N)$ such that $Y = F_*(X)$. 
+
+\proof
+
+If $Y$ exists then $Y_{F(p)} = F_*(X_p)$, so it is unique. 
+
+This also defines $Y$ but we need to check smooth dependence on $p$. 
+
+We check on a function $f \in C^\oo(N)$. Because $Yf\circ F = X(f\circ F)$ , $Yf = [X(f\circ F)]\circ F^{-1} \in C^\oo(M)$
+
+\qed
+
+\defn
+
+Let $F:M\to M$ be a diffeomorphism, $X \in \mathfrak{X}(M)$. Say $X$ is \underline{invariant under $F$} if $F_*(X) = X$, i.e. $F_*(X_p) = X_{F(p)}$ for all $p$. 
+
+
+
+
+\section*{Lecture ??, 11/28/23}
+
+I missed the last few lectures, cry about it!
+
+
+
+
+
+
+
+
+\subsection*{Chapter 9: Integral curves and flows}
+
+\defn
+
+Let $X \in \mathfrak{X}(M)$. An \underline{integral curve of $X$} is a curve $\gamma:(-\varepsilon,\varepsilon)\to M$ such that $\dot{\gamma}(t) = X(\gamma(t))$. 
+
+\exm
+
+Let $M = \R^2$, and $X = -y\pp{}{x} + x\pp{}{y}$
+
+Let $\gamma(t) = (x(t), y(t))$. For this to be an integral curve, we need $\dot{\gamma}(t) = X(\gamma(t))$. We have
+\[
+\dot{\gamma}(t) = x'(t)\pp{}{x} + y'(t)\pp{}{y}
+\]
+and
+\[
+X(\gamma(t)) = -y(t)\pp{}{x} + x(t)\pp{}{y}
+\]
+so for $X(\gamma(t)) = \dot{\gamma}(t)$, we need $x'(t) = -y(t)$ and $y'(t) = x(t)$. This is a system of first order ODEs. 
+
+If we impose the initial condition $\gamma(0) = (a, b)$, we get a unique solution, 
+\[
+\begin{cases}
+x(t) = a\cos(t) - b\sin(t) \\
+y(t) = b\cos(t) + a\sin(t) \\
+\end{cases}
+\]
+In general, an integral curve satisfies a system of first order ODEs. 
+
+If $(U, \phi)$ is a chart of $M$, we can write
+\[
+X = \sum_{i=1}^n X^i(x_1, \dots, x_n)\overbrace{\pp{}{x_i}}^{=(\phi^{-1})_*\left(\pp{}{x_i}\right)}
+\]
+If $\gamma:(-\varepsilon,\varepsilon)\to M$, we can consider the composition $\phi\circ\gamma$, a curve on $\R^n$. If we abuse notation somewhat, and write $\gamma = \phi\circ\gamma$, we see
+\[
+\dot{\gamma} = \sum_{i=1}^nx_i'(t). \pp{}{x_i}
+\]
+where $\phi\circ\gamma = (x_1, \dots, x_n)$
+
+For $\gamma$ to be an integral curve of $X$, we need $\dot{\gamma}(t) = X(\gamma(t))$, so 
+\[
+\begin{cases}
+x_1'(t) = X^1(x_1, \dots, x_n) \\
+\vdots \\
+x_n'(t) = X^n(x_1, \dots, x_n) \\
+\end{cases}
+\]
+This is an autonomous system. We get existenece, uniqueness, stability from standard ODE theory. 
+
+\prop
+
+Let $X \in\mk{X}(M)$. For all $p \in M$, there is an open neighborhood $U \ni p$ and $\varepsilon>0$ so that for all $g \in U$, there is an integral curve $\gamma_g(t):(-\varepsilon,\varepsilon) \to M$ such that $\gamma_g(0) = g$. Moreover, such $\gamma_g(t)$ is unique, and $\gamma_q$ depends smoothly on $q$. 
+
+\proof
+
+Standard ODE shit in local coordinates
+
+\qed
+
+\defn
+
+$X \in \mk{X}(M)$ is called \underline{complete} if for all $p\in M$, the integral curve $\gamma(t)$ with $\gamma(0) = p$ is defined for all $t\in\R$
+
+\prop
+
+Let $F:M\to N$ be $C^\oo$, $X \in \mk{X}(M), Y \in \mk{X}(N)$ be $F$-related. 
+
+Then any integral curve $\gamma(t)$ of $X$ will be mapped to an integral curve of $Y$ under $F$. Conversely, if $F$ takes integral curves of $X$ to integral curves of $Y$, then $X, Y$ are $F$-related.
+
+\proof
+
+Wasn't paying attention, don't care
+
+\section*{Lecture something, 11/30/23}
+
+\lem[Uniform Time Lemma]
+
+If $X$ is a vector field such that there is some $\varepsilon_0>0$ such that for any $t \leq \varepsilon_0$, the integral curve at any point exists for $t$, then $X$ is complete. 
+
+The contrapositive says that if $X$ is not complete, then for any $\varepsilon>0$ there is a point $p$ such that there is no integral curve from $(-\varepsilon,\varepsilon)\to M$ such that $\gamma(0) = p$. 
+
+\proof
+
+\qed
+
+Recall that if $G$ is a Lie group, and $X \in \mk{g}$, then $X$ is complete. 
+
+\defn
+
+A vector field $X$ is called \underline{compactly supported} if it is identically zero outside of a compact set. 
+
+\thm
+
+Every compactly supported vector field is complete. 
+
+\cor
+
+Every vector field on a compact manifold is complete. 
+
+\proof
+
+For simplicity, assume $M$ is a compact manifold. 
+
+For each point $p$, there is a neighborhood $U_p$ and a $\varepsilon_p>0$ such that for any point $p' \in U_p$, an integral curve $\gamma:(-\varepsilon_p,\varepsilon_p)\to M$ exists such that $\gamma(0) = p'$ (this exists because of standard ODE shit)
+
+So $\{U_p\}$ is an open cover, so by compactness has a finite subcover. 
+
+Let $U_1 = U_{p_1}, \dots, U_k = U_{p_k}$, $\varepsilon_i = \varepsilon_{p_i}>0$. 
+
+Set $\varepsilon_0 = \min\{\varepsilon_1,\dots,\varepsilon_m\}>0$, and by the uniform time of existence lemma it is complete. 
+
+\qed
+
+Let $X \in \mk{X}(M)$ be complete. For all $p \in M$, there is an integral curve $\gamma_p(t), t \in \R, \gamma_p(0) = p$. 
+
+Define $\theta:\R \times M \to M$ by $(t, p) \mapsto \gamma_p(t)$. This is $C^\oo$. Observe
+\begin{enumerate}
+
+\item $\theta(0, p) = p$ for all $p \in M$ 
+
+\item $\theta(t, \theta(s, p)) = \theta(t + s, p)$
+
+\end{enumerate}
+
+\defn
+
+$\theta$ is called the \underline{flow generated by $X$} (one-parameter group action). 
+
+Another view: 
+
+Fix $t \in \R$, then $\theta_t:M\to M$ is a diffeomorphism, $p \mapsto \theta(t, p)$. We have
+\[
+\begin{cases}
+\theta_{-t}\circ\theta_t = \Id \\
+\theta_0 = \Id \\
+\end{cases}
+\]
+this is a one parameter family of diffeomorphisms of $M$. 
+
+\exm
+
+Let $G = \GL(n,\R)$, $A \in T_{I_n}G \simeq gl(n, \R)$, then $X_A$ is the left invariant vector field given by $A$. For all $g \in G$, $X_A(g) = gA$. What's the flow generated by $X_A$?
+
+We need to compute integral curves $\gamma_g(t)$ 
+\[
+\begin{cases}
+\dot{\gamma_g}(t) = X_A(\gamma_g(t)) = \gamma_g(t)A\\
+\gamma_g(0) = 0 \\
+\end{cases}
+\]
+So we have $x' = xa, x(0) = c$, so $x = ce^{at}$
+
+We get $\gamma_g(t) = ge^{tA}$
+
+The flow $\theta(t, g) = ge^{tA}$
+
+\underline{Upshot:}
+
+If $X \in \mk{X}(M)$ is complete, it generates a flow by integration. If We have a one-parameter family of diffeomorphisms $\theta:\R\times M \to M$, by differentiation we get a complete vector field. 
+
+What if $X$ is not complete? In this case, we have something called the local flow. 
+
+\prop[Fundamental Theorem on Flow] 
+
+Let $X \in \mk{X}(M)$. Then this generated a local flow on $M$, i.e for all $p \in M$, there is some $\varepsilon>0$ and open $U \ni p$ such that there is $\theta:(-\varepsilon,\varepsilon)\times U\to M$ defined by $(t, p) \mapsto \gamma_p(t)$ which satisfies
+\begin{enumerate}
+
+\item $\theta(0,q) = q$ for all $q \in U$. 
+
+\item $\theta(t, \theta(s, q)) = \theta(t + s, q)$
+
+\end{enumerate}
+
+\defn
+
+For $X, Y \in \mk{X}(M)$, we define the \underline{Lie Derivative of $Y$ with respect to $X$}, $L_XY \in \mk{X}(M)$, as follows. Associated to $X$ are integral curves, even if they are only locally defined. We have vectors $Y(\theta(t, p))$. We have a local diffeomorphism $\theta_{-t}$ which we can use to pushforward $Y(theta(t, p))$. Then we can take the difference because we are in the same vector space:
+\[
+(L_XY)(p) = \lim_{t\to0}\frac{1}{t}\left((\theta_{-t})_*(Y(\theta(t, p))) - Y(p) \right)
+\]
+
+
+\thm
+
+\[
+L_XY = [X,Y]
+\]
+
+
+\end{document}
+
